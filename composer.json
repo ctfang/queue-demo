@@ -15,11 +15,12 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "swoft/framework": "~2.0.0",
-    "swoft/http-server": "~2.0.0"
+    "swoft/http-server": "~2.0.0",
+    "swoft/redis": "~2.0.0",
+    "swoft/process": "~2.0.0"
   },
   "require-dev": {
-    "swoft/swoole-ide-helper": "dev-master",
-    "phpunit/phpunit": "^7.5"
+    "swoft/swoole-ide-helper": "dev-master"
   },
   "autoload": {
     "psr-4": {

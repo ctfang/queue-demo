@@ -1,6 +1,7 @@
 <?php
 
 use Swoft\Http\Server\HttpServer;
+use Swoft\Redis\RedisDb;
 
 return [
     'logger'     => [
@@ -8,12 +9,17 @@ return [
         'enable'       => false,
         'json'         => false,
     ],
-    'httpServer' => [
-        'class'   => HttpServer::class,
-        'port'    => 18306,
-        /* @see HttpServer::$setting */
-        'setting' => [
-            'worker_num' => 8,
+    'processPool' => [
+        'class' => \Swoft\Process\ProcessPool::class,
+        'workerNum' => 3
+    ],
+    'redis'             => [
+        'class'    => RedisDb::class,
+        'host'     => env('REDIS_HOST','127.0.0.1'),
+        'port'     => 6379,
+        'database' => 0,
+        'option'   => [
+            'prefix' => 'queue:'
         ]
-    ]
+    ],
 ];
