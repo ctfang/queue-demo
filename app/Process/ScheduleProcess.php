@@ -51,7 +51,7 @@ class ScheduleProcess implements ProcessInterface
         $this->workerId = $workerId;
         $this->pool = $pool;
         $this->process = $pool->getProcess($workerId);
-        $this->process->useQueue(1,2);
+        $this->process->useQueue(2,2);
 
         $this->addSignal();
 
@@ -72,11 +72,9 @@ class ScheduleProcess implements ProcessInterface
                 break;
             }
 
-            CLog::info('worker-' . $this->workerId . " start");
-
-            Coroutine::sleep(5);
-
-            CLog::info("worker-run is stop");
+            CLog::info("开始处理任务");
+            Coroutine::sleep(1);
+            CLog::info("结束处理任务");
         }
     }
 
@@ -100,26 +98,9 @@ class ScheduleProcess implements ProcessInterface
             CLog::info("发送停止信息到通道");
             $this->process->push(self::STOP);
         }
+        file_put_contents(alias("@runtime/").date("Y-m-d H:i:s").'.txt', '结束');
         $this->runWhile = false;
         Event::wait();
-        $this->process->exit(0);
-    }
-
-    /**
-     * @param $timeout
-     *
-     * @return void
-     */
-    public function registerTimeoutHandler($timeout)
-    {
-        /*
-         * 通过定时器实现超时自动杀进程, 由调度器重启进程
-         * 注意, 要是在 Job 里面执行 exit 操作, 会触发超时杀进程
-         */
-        \Swoole\Process::signal(SIGALRM, function () {
-            \swoole_process::alarm(-1);
-            \Swoole\Process::kill($this->process->pid, SIGTERM);
-        });
-        \swoole_process::alarm(1000000 * $timeout);
+        $this->process->exit(1);
     }
 }

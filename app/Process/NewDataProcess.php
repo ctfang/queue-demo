@@ -48,7 +48,7 @@ class NewDataProcess implements ProcessInterface
         $this->pool = $pool;
         $this->process = $pool->getProcess($workerId);
 
-        $this->process->useQueue(1,2);
+        $this->process->useQueue(2,2);
 
         sgo([$this,'runWhile']);
 
@@ -57,7 +57,7 @@ class NewDataProcess implements ProcessInterface
 
     public function runWhile()
     {
-        $limit = 0;
+        $limit = 10;
         $num = 10;
 
         while ($this->runWhile) {
@@ -65,11 +65,11 @@ class NewDataProcess implements ProcessInterface
             if (!$num) $this->runWhile = false;
 
             if ( $this->process->statQueue()["queue_num"]<$limit ){
-                CLog::info("new Data");
+                CLog::info("生成队列数据,每秒一个");
                 $this->process->push(json_encode(['runTime'=>date("Y-m-d H:i:s")]));
             }
 
-            Coroutine::sleep(10);
+            Coroutine::sleep(1);
         }
     }
 }

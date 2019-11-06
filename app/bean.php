@@ -11,7 +11,7 @@ return [
     ],
     'processPool' => [
         'class' => \Swoft\Process\ProcessPool::class,
-        'workerNum' => 3
+        'workerNum' => 2
     ],
     'redis'             => [
         'class'    => RedisDb::class,
